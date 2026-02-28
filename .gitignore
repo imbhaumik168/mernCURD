@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
+
+# Logs
+*.log
+backend/*.log
+frontend/*.log
+backend/install_log.txt
+backend/install_log_v2.txt
+
+# React build
+frontend/dist/
+frontend/build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
