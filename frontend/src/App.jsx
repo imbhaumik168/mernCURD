@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './index.css';
 
-const API_URL = 'http://localhost:5000/api/items';
+const API_URL = '/api/items';
 
 function App() {
     const [items, setItems] = useState([]);
@@ -105,7 +105,7 @@ function App() {
             </div>
 
             <div className="item-list">
-                {items.map((item) => (
+                {Array.isArray(items) && items.map((item) => (
                     <div key={item._id} className="glass-card item-card">
                         <div className="item-info">
                             <h3>{item.name} <span className={`badge badge-${item.priority}`}>{item.priority}</span></h3>
