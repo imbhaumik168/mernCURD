@@ -19,6 +19,9 @@ mongoose.connect(MONGODB_URI)
     .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
+app.get('/', (req, res) => {
+    res.json({ message: 'Task Master API is running' });
+});
 
 // CREATE
 app.post('/api/items', async (req, res) => {
