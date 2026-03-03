@@ -14,9 +14,23 @@ app.use(express.json());
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mern-crud';
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+
+// Log URI with hidden password
+const sanitizedUri = MONGODB_URI.replace(/:([^:@]+)@/, ':****@');
+console.log('Connecting to:', sanitizedUri);
+
+mongoose.set('bufferCommands', false); // Fail immediately if not connected
+
+mongoose.connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000 // Fast fail
+})
+    .then(() => console.log('MongoDB connected successfully'))
+    .catch(err => {
+        console.error('MongoDB connection error:', err.message);
+        if (err.message.includes('Authentication failed')) {
+            console.error('CRITICAL: Incorrect username or password in .env');
+        }
+    });
 
 // Routes
 app.get('/', (req, res) => {
