@@ -14,22 +14,24 @@ app.use(express.json());
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI;
-// Log URI with hidden password
-const sanitizedUri = MONGODB_URI.replace(/:([^:@]+)@/, ':****@');
-console.log('Connecting to:', sanitizedUri);
 
-mongoose.set('bufferCommands', false); // Fail immediately if not connected
+if (!MONGODB_URI) {
+    console.error('ERROR: MONGODB_URI is not defined in environment variables');
+} else {
+    // Log URI with hidden password
+    const sanitizedUri = MONGODB_URI.replace(/:([^:@]+)@/, ':****@');
+    console.log('Connecting to:', sanitizedUri);
 
-mongoose.connect(MONGODB_URI, {
-    serverSelectionTimeoutMS: 5000 // Fast fail
-})
-    .then(() => console.log('MongoDB connected successfully'))
-    .catch(err => {
-        console.error('MongoDB connection error:', err.message);
-        if (err.message.includes('Authentication failed')) {
-            console.error('CRITICAL: Incorrect username or password in .env');
-        }
-    });
+    mongoose.set('bufferCommands', false);
+
+    mongoose.connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 5000
+    })
+        .then(() => console.log('MongoDB connected successfully'))
+        .catch(err => {
+            console.error('MongoDB connection error:', err.message);
+        });
+}
 
 // Routes
 app.get('/', (req, res) => {
