@@ -13,8 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mern-crud';
-
+const MONGODB_URI = process.env.MONGODB_URI;
 // Log URI with hidden password
 const sanitizedUri = MONGODB_URI.replace(/:([^:@]+)@/, ':****@');
 console.log('Connecting to:', sanitizedUri);
