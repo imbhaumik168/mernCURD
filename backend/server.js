@@ -23,6 +23,21 @@ app.get('/', (req, res) => {
     res.json({ message: 'Task Master API is running' });
 });
 
+// DB Test Route
+app.get('/api/db-test', async (req, res) => {
+    try {
+        const state = mongoose.connection.readyState;
+        const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+        res.json({
+            status: states[state],
+            dbName: mongoose.connection.name,
+            uri_configured: !!process.env.MONGODB_URI
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // CREATE
 app.post('/api/items', async (req, res) => {
     try {
@@ -31,7 +46,11 @@ app.post('/api/items', async (req, res) => {
         res.status(201).json(savedItem);
     } catch (err) {
         console.error('POST Error:', err.message);
-        res.status(400).json({ message: err.message });
+        res.status(400).json({
+            message: 'Validation or Save Error',
+            error: err.message,
+            receivedData: req.body
+        });
     }
 });
 
@@ -42,7 +61,11 @@ app.get('/api/items', async (req, res) => {
         res.json(items);
     } catch (err) {
         console.error('GET Error:', err.message);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({
+            message: 'Failed to fetch items',
+            error: err.message,
+            stack: process.env.NODE_ENV === 'production' ? null : err.stack
+        });
     }
 });
 

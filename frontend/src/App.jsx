@@ -18,7 +18,8 @@ function App() {
             const response = await axios.get(API_URL);
             setItems(response.data);
         } catch (error) {
-            console.error('Error fetching items:', error);
+            console.error('Error fetching items:', error.response?.data || error.message);
+            console.log('Full Error:', error);
         }
     };
 
@@ -34,7 +35,8 @@ function App() {
             setFormData({ name: '', description: '', priority: 'Medium' });
             fetchItems();
         } catch (error) {
-            console.error('Error saving item:', error);
+            console.error('Error saving item:', error.response?.data || error.message);
+            alert(`Error: ${error.response?.data?.message || 'Failed to save item'}`);
         }
     };
 
@@ -48,7 +50,7 @@ function App() {
             await axios.delete(`${API_URL}/${id}`);
             fetchItems();
         } catch (error) {
-            console.error('Error deleting item:', error);
+            console.error('Error deleting item:', error.response?.data || error.message);
         }
     };
 
